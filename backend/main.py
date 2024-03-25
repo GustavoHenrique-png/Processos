@@ -9,12 +9,12 @@ def listagem():#inserido o comando no shell, aqui do linux
     out, erro = proccess.comunicate
     return out.decode()
 
-def arquivo(listaProcessos, arquivoProcessos):
+def arquivo(listaProcessos, arquivoProcessos): #escreve os processos listado em um arquivo
     with open(arquivoProcessos,"w") as archive:
         archive.write(listaProcessos)
     
 
-def main():
+def main():#a cada 30s cria uma nova lista com os processos
     contador = 1
 
     while True:

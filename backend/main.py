@@ -1,30 +1,25 @@
-import os
-import time
 import subprocess
+import time
 
-def listagem():#inserido o comando no shell, aqui do linux
+def listar_processos():
+    comando = "ps aux"
+    processo = subprocess.Popen(comando, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    saida, erro = processo.communicate()
+    return saida.decode()
 
-    command = 'ps aux'
-    proccess = proccess.POpen(command, shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, erro = proccess.comunicate
-    return out.decode()
+def criar_arquivo(lista_processos, nome_arquivo):
+    with open(nome_arquivo, "w") as arquivo:
+        arquivo.write(lista_processos)
 
-def arquivo(listaProcessos, arquivoProcessos): #escreve os processos listado em um arquivo
-    with open(arquivoProcessos,"w") as archive:
-        archive.write(listaProcessos)
-    
-
-def main():#a cada 30s cria uma nova lista com os processos
+def main():
     contador = 1
-
     while True:
-        listaProcessos = listagem()
-        arquivoProcessos = f"listinhaDeProcessos_{contador}.txt"
-        arquivo(listaProcessos,arquivoProcessos)
+        lista_processos = listar_processos()
+        nome_arquivo = f"lista_de_processos_{contador}.txt"
+        criar_arquivo(lista_processos, nome_arquivo)
+        print(f"Arquivo {nome_arquivo} atualizado.")
         contador += 1
         time.sleep(30)
 
-
-
-if __name__ =="__main__":
+if __name__ == "__main__":
     main()

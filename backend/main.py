@@ -24,3 +24,11 @@ def main():#a cada 30s cria uma nova lista com os processos
 
 if __name__ =="__main__":
     main()
+
+#dataset pandas
+#dataset pickle*
+#rotular dados
+#definir um dataset para criar um treinamento robusto sem muitos falsos resultados
+#buscar outros S.O
+#tipos de ameaças
+#achar uma ameça controlavel

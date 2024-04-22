@@ -1,5 +1,8 @@
+import os
 import time
 import subprocess
+import pandas as pd
+import pickle
 
 def listagem(): #inserido o comando no shell, aqui do linux
     command = "ps aux"
@@ -7,26 +10,38 @@ def listagem(): #inserido o comando no shell, aqui do linux
     out, erro = proccess.communicate()
     return out.decode()
 
-def arquivo(listaProcessos, arquivoProcessos): #escreve os processos listado em um arquivo
-    with open(arquivoProcessos,"w") as archive:
-        archive.write(listaProcessos)
-    
+def arquivo(data, processos):#escreve os processos listado em um arquivo
+    with open(processos,"ab") as file:
+        pickle.dump(data, file)
+
+def rotulaProcesso(processos):
+    dados = processos.split
+    return{
+        'USER': dados[0],
+        'PID': int(dados[1]),
+        '%CPU': float(dados[2]),
+        '%MEM': float(dados[3]),
+        'VSZ': int(dados[4]),
+        'RSS': int(dados[5]),
+        'TTY': dados[6],
+        'STAT': dados[7],
+        'START': dados[8],
+        'TIME': dados[9],
+        'COMMAND': ' '.join(dados[10:])
+    }
 
 def main():#a cada 30s cria uma nova lista com os processos
     contador = 1
-
+    os.makedirs("datasets")
+    arquivoProcessos = 'datasets/processos.pkl'
     while True:
-        listaProcessos = listagem()
-        arquivoProcessos = f"listinhaDeProcessos_{contador}.txt"
-        arquivo(listaProcessos,arquivoProcessos)
-        contador += 1
-        time.sleep(30)
+        processos = listagem()
+        dadosProcessos = [rotulaProcesso(processo) for processo in processos if processo]
+        arquivo(dadosProcessos,arquivoProcessos)
 
 if __name__ =="__main__":
     main()
 
-#dataset pandas
-#dataset pickle*
 #rotular dados
 #definir um dataset para criar um treinamento robusto sem muitos falsos resultados
 #buscar outros S.O

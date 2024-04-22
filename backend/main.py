@@ -16,6 +16,8 @@ def arquivo(data, processos): # escreve os processos listados em um arquivo
 
 def rotulaProcesso(processos):
     dados = processos.split()
+    if dados[0] == 'USER':
+        return None
     return {
         'USER': dados[0],
         'PID': int(dados[1]),
@@ -37,6 +39,7 @@ def main(): # a cada 30s cria uma nova lista com os processos
     while True:
         processos = listagem().split('\n') #dividindo a saída em linhas
         dadosProcessos = [rotulaProcesso(processo) for processo in processos if processo]
+        dadosProcessos = [dados for dados in dadosProcessos if dados is not None]
         arquivo(dadosProcessos, arquivoProcessos)
         time.sleep(30)  # adicionando um intervalo de 30 segundos
 

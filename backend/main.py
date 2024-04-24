@@ -14,6 +14,11 @@ def arquivo(data, processos): # escreve os processos listados em um arquivo
     with open(processos, "ab") as file:
         pickle.dump(data, file)
 
+def arquivoCsv(data, arquivo):
+    df = pd.DataFrame(data)
+    if not os.path.isfile(arquivo):
+        df.to_csv(arquivo, index=False)
+
 def rotulaProcesso(processos):
     dados = processos.split()
     if dados[0] == 'USER':
@@ -41,6 +46,7 @@ def main(): # a cada 30s cria uma nova lista com os processos
         dadosProcessos = [rotulaProcesso(processo) for processo in processos if processo]
         dadosProcessos = [dados for dados in dadosProcessos if dados is not None]
         arquivo(dadosProcessos, arquivoProcessos)
+        arquivoCsv(dadosProcessos,arquivoProcessos)
         time.sleep(30)  # adicionando um intervalo de 30 segundos
 
 if __name__ == "__main__":
